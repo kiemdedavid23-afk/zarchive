@@ -8,7 +8,7 @@ on:
         required: true
         type: string
       app_name:
-        description: "Nom du dossier de sortie"
+        description: "Nom du dossier de sortie (lettres, chiffres, - _ .)"
         required: true
         type: string
         default: "application-decompilee"
@@ -21,13 +21,38 @@ on:
 permissions:
   contents: write
 
+# Évite deux décompilations simultanées qui se télescoperaient au push
+concurrency:
+  group: decompile-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  JADX_VERSION: "1.5.6"
+  APKTOOL_VERSION: "2.10.0"
+
 jobs:
   decompile:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
 
     steps:
       - name: Récupérer le dépôt
         uses: actions/checkout@v4
+
+      - name: Valider les entrées
+        env:
+          APP: ${{ inputs.app_name }}
+          URL: ${{ inputs.apk_url }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$APP" =~ ^[A-Za-z0-9._-]+$ ]] || [[ "$APP" == .* ]]; then
+            echo "::error::app_name invalide : utilise uniquement lettres, chiffres, '-', '_' et '.' (sans point initial)."
+            exit 1
+          fi
+          if [[ ! "$URL" =~ ^https:// ]]; then
+            echo "::error::apk_url doit commencer par https://"
+            exit 1
+          fi
 
       - name: Installer Java
         uses: actions/setup-java@v4
@@ -36,65 +61,107 @@ jobs:
           java-version: "17"
 
       - name: Télécharger l'APK depuis la release
+        env:
+          URL: ${{ inputs.apk_url }}
         run: |
+          set -euo pipefail
           mkdir -p apk
-          curl -L --fail --retry 3 \
-            -o "apk/application.apk" \
-            "${{ github.event.inputs.apk_url }}"
+          curl -L --fail --retry 3 -o apk/application.apk "$URL"
 
           ls -lh apk/application.apk
           file apk/application.apk
 
+          # Vérifie que c'est bien une archive ZIP/APK
+          unzip -tq apk/application.apk >/dev/null \
+            || { echo "::error::Le fichier téléchargé n'est pas un APK valide."; exit 1; }
+
       - name: Installer JADX et APKTool
         run: |
-          sudo apt-get update
-          sudo apt-get install -y apktool unzip curl
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq unzip curl
 
-          mkdir -p /opt/jadx
-          curl -L --fail --retry 3 \
-            -o /tmp/jadx.zip \
-            "https://github.com/skylot/jadx/releases/download/v1.5.6/jadx-1.5.6.zip"
+          # JADX
+          sudo mkdir -p /opt/jadx
+          curl -L --fail --retry 3 -o /tmp/jadx.zip \
+            "https://github.com/skylot/jadx/releases/download/v${JADX_VERSION}/jadx-${JADX_VERSION}.zip"
+          sudo unzip -q /tmp/jadx.zip -d /opt/jadx
+          sudo chmod +x /opt/jadx/bin/jadx
 
-          unzip -q /tmp/jadx.zip -d /opt/jadx
-          chmod +x /opt/jadx/bin/jadx
+          # APKTool récent (la version apt est trop ancienne pour les APK modernes)
+          sudo mkdir -p /opt/apktool
+          curl -L --fail --retry 3 -o /opt/apktool/apktool.jar \
+            "https://github.com/iBotPeaches/Apktool/releases/download/v${APKTOOL_VERSION}/apktool_${APKTOOL_VERSION}.jar"
+
+          # Disponible pour les étapes suivantes
           echo "/opt/jadx/bin" >> "$GITHUB_PATH"
 
-          jadx --version
-          apktool --version
+          # Chemins complets : le PATH n'est pas encore à jour dans cette étape
+          /opt/jadx/bin/jadx --version
+          java -jar /opt/apktool/apktool.jar --version
 
       - name: Décompiler le code Java avec JADX
+        env:
+          APP: ${{ inputs.app_name }}
         run: |
-          APP="${{ github.event.inputs.app_name }}"
-          mkdir -p "decompiled/${APP}/jadx"
+          set -uo pipefail
+          OUT="decompiled/${APP}/jadx"
+          mkdir -p "$OUT"
 
-          jadx \
-            --deobf \
-            --show-bad-code \
-            -j 4 \
-            -d "decompiled/${APP}/jadx" \
-            "apk/application.apk" || echo "JADX a terminé avec des avertissements."
+          # JADX renvoie un code non nul dès qu'une classe pose problème : on tolère
+          # ce cas, mais on vérifie qu'il a bien produit des fichiers.
+          jadx --deobf --show-bad-code -j 4 -d "$OUT" apk/application.apk \
+            || echo "::warning::JADX a terminé avec des erreurs (code partiellement décompilé)."
+
+          if [ -z "$(find "$OUT" -type f -print -quit)" ]; then
+            echo "::error::JADX n'a produit aucun fichier."
+            exit 1
+          fi
 
       - name: Décompiler les ressources avec APKTool
+        env:
+          APP: ${{ inputs.app_name }}
         run: |
-          APP="${{ github.event.inputs.app_name }}"
-          mkdir -p "decompiled/${APP}/apktool"
+          set -uo pipefail
+          OUT="decompiled/${APP}/apktool"
+          mkdir -p "$OUT"
 
-          apktool d \
-            -f \
-            -o "decompiled/${APP}/apktool" \
-            "apk/application.apk" || echo "APKTool a terminé avec des avertissements."
+          java -jar /opt/apktool/apktool.jar d -f -o "$OUT" apk/application.apk \
+            || echo "::warning::APKTool a terminé avec des erreurs."
+
+          if [ ! -f "$OUT/AndroidManifest.xml" ]; then
+            echo "::warning::APKTool n'a pas produit d'AndroidManifest.xml (décompilation incomplète)."
+          fi
+
+      - name: Résumé
+        env:
+          APP: ${{ inputs.app_name }}
+        run: |
+          {
+            echo "### Décompilation de \`${APP}\`"
+            echo "- Fichiers JADX : $(find "decompiled/${APP}/jadx" -type f | wc -l)"
+            echo "- Fichiers APKTool : $(find "decompiled/${APP}/apktool" -type f | wc -l)"
+            echo "- Taille totale : $(du -sh "decompiled/${APP}" | cut -f1)"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Committer et pousser les fichiers décompilés
+        env:
+          APP: ${{ inputs.app_name }}
+          MSG: ${{ inputs.commit_message }}
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add decompiled/
+          git add "decompiled/${APP}"
 
           if git diff --cached --quiet; then
             echo "Aucun changement à committer."
             exit 0
           fi
 
-          git commit -m "${{ github.event.inputs.commit_message }}"
-          git push
+          git commit -m "${MSG:-Ajout de la décompilation de l'application}"
+
+          # Évite l'échec du push si le dépôt a avancé pendant le job
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
