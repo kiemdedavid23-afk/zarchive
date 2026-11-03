@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen android:title="@string/OPT_SECTION_ROOT"
-  xmlns:android="http://schemas.android.com/apk/res/android">
-    <ListPreference android:entries="@array/OPT_ROOT_TYPE_VALUE" android:title="@string/OPT_ROOT_TYPE" android:key="iRootType" android:summary="%s" android:defaultValue="0" android:dialogTitle="@string/OPT_ROOT_TYPE" android:entryValues="@array/OPT_LIST_THEME_VALUE" />
-    <SwitchPreference android:title="@string/OPT_ROOT_FM" android:key="bRoot" android:summary="@string/OPT_ROOT_FM_SETUP" android:defaultValue="false" />
-    <SwitchPreference android:title="@string/OPT_ROOT_RESTORE_CONTEXT" android:key="bFixSEContext" android:summary="@string/OPT_ROOT_RESTORE_CONTEXT_SETUP" android:dependency="bRoot" android:defaultValue="true" />
-</PreferenceScreen>

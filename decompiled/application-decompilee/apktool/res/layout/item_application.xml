@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ru.zdevs.zarchiver.ui.layout.CheckableRelativeLayout android:paddingLeft="?android:listPreferredItemPaddingLeft" android:paddingRight="?android:listPreferredItemPaddingRight" android:layout_width="fill_parent" android:layout_height="wrap_content"
-  xmlns:android="http://schemas.android.com/apk/res/android">
-    <ImageView android:gravity="center_vertical" android:id="@id/icon" android:paddingTop="@dimen/padding_medium" android:paddingBottom="@dimen/padding_medium" android:layout_width="?android:listPreferredItemHeight" android:layout_height="?android:listPreferredItemHeight" android:scaleType="centerInside" android:layout_alignTop="@id/container" android:layout_alignBottom="@id/container" android:contentDescription="@null" android:paddingEnd="?android:listPreferredItemPaddingLeft" android:layout_alignParentStart="true" />
-    <LinearLayout android:gravity="start|center" android:orientation="vertical" android:id="@id/container" android:layout_width="fill_parent" android:layout_height="?android:listPreferredItemHeight" android:layout_toEndOf="@id/icon">
-        <TextView android:textAppearance="?android:textAppearanceListItemSmall" android:id="@id/text" android:paddingBottom="@dimen/padding_tiny" android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true" />
-        <TextView android:textAppearance="?android:textAppearanceListItemSecondary" android:id="@id/desc" android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true" />
-    </LinearLayout>
-</ru.zdevs.zarchiver.ui.layout.CheckableRelativeLayout>

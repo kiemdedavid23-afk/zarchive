@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="action_bar_default_height">48dp</dimen>
-    <dimen name="bottomsheet_dlg_header">32dp</dimen>
-    <dimen name="bottomsheet_dlg_height">74dp</dimen>
-    <dimen name="bottomsheet_dlg_width">560dp</dimen>
-    <dimen name="bottomsheet_height">230dp</dimen>
-</resources>
