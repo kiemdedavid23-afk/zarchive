@@ -8,7 +8,7 @@ on:
         required: true
         type: string
       app_name:
-        description: "Nom du dossier de sortie (lettres, chiffres, - _ .)"
+        description: "Nom de l'application (lettres, chiffres, - _ .)"
         required: true
         type: string
         default: "application-decompilee"
@@ -16,12 +16,16 @@ on:
         description: "Message du commit"
         required: false
         type: string
-        default: "Ajout de la décompilation de l'application"
+        default: "Ajout du rapport d'analyse de l'application"
+      supprimer_ancien_dossier:
+        description: "Supprimer l'ancien dossier decompiled/ du dépôt (l'historique Git reste lourd)"
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
 
-# Évite deux décompilations simultanées qui se télescoperaient au push
 concurrency:
   group: decompile-${{ github.ref }}
   cancel-in-progress: false
@@ -65,14 +69,14 @@ jobs:
           URL: ${{ inputs.apk_url }}
         run: |
           set -euo pipefail
-          mkdir -p apk
-          curl -L --fail --retry 3 -o apk/application.apk "$URL"
+          # Tout le travail se fait hors du dépôt pour ne rien y laisser de lourd
+          mkdir -p "$RUNNER_TEMP/work/apk"
+          curl -L --fail --retry 3 -o "$RUNNER_TEMP/work/apk/application.apk" "$URL"
 
-          ls -lh apk/application.apk
-          file apk/application.apk
+          ls -lh "$RUNNER_TEMP/work/apk/application.apk"
+          file "$RUNNER_TEMP/work/apk/application.apk"
 
-          # Vérifie que c'est bien une archive ZIP/APK
-          unzip -tq apk/application.apk >/dev/null \
+          unzip -tq "$RUNNER_TEMP/work/apk/application.apk" >/dev/null \
             || { echo "::error::Le fichier téléchargé n'est pas un APK valide."; exit 1; }
 
       - name: Installer JADX et APKTool
@@ -81,36 +85,29 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq unzip curl
 
-          # JADX
           sudo mkdir -p /opt/jadx
           curl -L --fail --retry 3 -o /tmp/jadx.zip \
             "https://github.com/skylot/jadx/releases/download/v${JADX_VERSION}/jadx-${JADX_VERSION}.zip"
           sudo unzip -q /tmp/jadx.zip -d /opt/jadx
           sudo chmod +x /opt/jadx/bin/jadx
 
-          # APKTool récent (la version apt est trop ancienne pour les APK modernes)
           sudo mkdir -p /opt/apktool
-          curl -L --fail --retry 3 -o /opt/apktool/apktool.jar \
+          curl -L --fail --retry 3 -o /tmp/apktool.jar \
             "https://github.com/iBotPeaches/Apktool/releases/download/v${APKTOOL_VERSION}/apktool_${APKTOOL_VERSION}.jar"
+          sudo mv /tmp/apktool.jar /opt/apktool/apktool.jar
 
-          # Disponible pour les étapes suivantes
           echo "/opt/jadx/bin" >> "$GITHUB_PATH"
 
-          # Chemins complets : le PATH n'est pas encore à jour dans cette étape
           /opt/jadx/bin/jadx --version
           java -jar /opt/apktool/apktool.jar --version
 
       - name: Décompiler le code Java avec JADX
-        env:
-          APP: ${{ inputs.app_name }}
         run: |
           set -uo pipefail
-          OUT="decompiled/${APP}/jadx"
+          OUT="$RUNNER_TEMP/work/decompiled/jadx"
           mkdir -p "$OUT"
 
-          # JADX renvoie un code non nul dès qu'une classe pose problème : on tolère
-          # ce cas, mais on vérifie qu'il a bien produit des fichiers.
-          jadx --deobf --show-bad-code -j 4 -d "$OUT" apk/application.apk \
+          jadx --deobf --show-bad-code -j 4 -d "$OUT" "$RUNNER_TEMP/work/apk/application.apk" \
             || echo "::warning::JADX a terminé avec des erreurs (code partiellement décompilé)."
 
           if [ -z "$(find "$OUT" -type f -print -quit)" ]; then
@@ -119,54 +116,322 @@ jobs:
           fi
 
       - name: Décompiler les ressources avec APKTool
-        env:
-          APP: ${{ inputs.app_name }}
         run: |
           set -uo pipefail
-          OUT="decompiled/${APP}/apktool"
+          OUT="$RUNNER_TEMP/work/decompiled/apktool"
           mkdir -p "$OUT"
 
-          java -jar /opt/apktool/apktool.jar d -f -o "$OUT" apk/application.apk \
+          java -jar /opt/apktool/apktool.jar d -f -o "$OUT" "$RUNNER_TEMP/work/apk/application.apk" \
             || echo "::warning::APKTool a terminé avec des erreurs."
 
           if [ ! -f "$OUT/AndroidManifest.xml" ]; then
             echo "::warning::APKTool n'a pas produit d'AndroidManifest.xml (décompilation incomplète)."
           fi
 
-      - name: Résumé
+      - name: Générer le rapport d'analyse
         env:
           APP: ${{ inputs.app_name }}
         run: |
-          {
-            echo "### Décompilation de \`${APP}\`"
-            echo "- Fichiers JADX : $(find "decompiled/${APP}/jadx" -type f | wc -l)"
-            echo "- Fichiers APKTool : $(find "decompiled/${APP}/apktool" -type f | wc -l)"
-            echo "- Taille totale : $(du -sh "decompiled/${APP}" | cut -f1)"
-          } >> "$GITHUB_STEP_SUMMARY"
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/analyse.py" <<'PY'
+          import sys, os, re, hashlib, collections, datetime
+          import xml.etree.ElementTree as ET
 
-      - name: Committer et pousser les fichiers décompilés
+          apk, atool, jadx, app, out = sys.argv[1:6]
+          AN = "{http://schemas.android.com/apk/res/android}"
+
+          def sha256(p):
+              h = hashlib.sha256()
+              with open(p, "rb") as f:
+                  for b in iter(lambda: f.read(1 << 20), b""):
+                      h.update(b)
+              return h.hexdigest()
+
+          def tree_size(p):
+              n = s = 0
+              for r, _, fs in os.walk(p):
+                  for f in fs:
+                      n += 1
+                      try: s += os.path.getsize(os.path.join(r, f))
+                      except OSError: pass
+              return n, s
+
+          L = []
+          def w(x=""): L.append(x)
+
+          w(f"# Rapport d'analyse : {app}")
+          w()
+          w(f"Généré le {datetime.datetime.now(datetime.timezone.utc):%Y-%m-%d %H:%M} UTC par le workflow GitHub Actions.")
+          w()
+
+          # ---- Manifest
+          pkg = ver = vcode = minsdk = tsdk = label = ""
+          perms, comps, main_act = [], collections.defaultdict(list), ""
+          mf = os.path.join(atool, "AndroidManifest.xml")
+          if os.path.isfile(mf):
+              try:
+                  root = ET.parse(mf).getroot()
+                  pkg = root.get("package", "")
+                  ver = root.get(AN + "versionName", "")
+                  vcode = root.get(AN + "versionCode", "")
+                  us = root.find("uses-sdk")
+                  if us is not None:
+                      minsdk = us.get(AN + "minSdkVersion", "")
+                      tsdk = us.get(AN + "targetSdkVersion", "")
+                  perms = sorted(p.get(AN + "name", "") for p in root.findall("uses-permission"))
+                  appn = root.find("application")
+                  if appn is not None:
+                      label = appn.get(AN + "label", "")
+                      for tag in ("activity", "service", "receiver", "provider"):
+                          for c in appn.findall(tag):
+                              comps[tag].append(c.get(AN + "name", ""))
+                      for a in appn.findall("activity"):
+                          for f in a.findall("intent-filter"):
+                              acts = [x.get(AN + "name") for x in f.findall("action")]
+                              cats = [x.get(AN + "name") for x in f.findall("category")]
+                              if "android.intent.action.MAIN" in acts and "android.intent.category.LAUNCHER" in cats:
+                                  main_act = a.get(AN + "name", "")
+              except Exception as e:
+                  w(f"> Manifest illisible : {e}")
+                  w()
+
+          # apktool.yml (sdk si absent du manifest)
+          yml = os.path.join(atool, "apktool.yml")
+          if os.path.isfile(yml):
+              t = open(yml, errors="ignore").read()
+              m = re.search(r"minSdkVersion: '?(\d+)", t); minsdk = minsdk or (m.group(1) if m else "")
+              m = re.search(r"targetSdkVersion: '?(\d+)", t); tsdk = tsdk or (m.group(1) if m else "")
+              m = re.search(r"versionName: (.+)", t); ver = ver or (m.group(1).strip() if m else "")
+
+          w("## 1. Identité de l'APK")
+          w()
+          w(f"- Taille de l'APK : {os.path.getsize(apk)/1048576:.1f} Mo")
+          w(f"- SHA-256 : `{sha256(apk)}`")
+          w(f"- Package : `{pkg or 'inconnu'}`")
+          w(f"- Version : {ver or '?'} (code {vcode or '?'})")
+          w(f"- minSdk / targetSdk : {minsdk or '?'} / {tsdk or '?'}")
+          w(f"- Activité de lancement : `{main_act or 'non trouvée'}`")
+          w()
+
+          # ---- Framework
+          w("## 2. Moteur / framework détecté")
+          w()
+          libs = collections.defaultdict(set)
+          libdir = os.path.join(atool, "lib")
+          if os.path.isdir(libdir):
+              for abi in os.listdir(libdir):
+                  d = os.path.join(libdir, abi)
+                  if os.path.isdir(d):
+                      for f in os.listdir(d):
+                          libs[f].add(abi)
+          assets_dir = os.path.join(atool, "assets")
+          asset_top = sorted(os.listdir(assets_dir)) if os.path.isdir(assets_dir) else []
+          unk = os.path.join(atool, "unknown")
+          all_names = set(libs) | set(asset_top)
+          rules = [
+              ("Flutter", lambda: "libflutter.so" in libs or "flutter_assets" in asset_top),
+              ("React Native", lambda: "libreactnativejni.so" in libs or any(a.startswith("index.android.bundle") for a in asset_top)),
+              ("  avec moteur Hermes", lambda: "libhermes.so" in libs),
+              ("Unity", lambda: "libunity.so" in libs or "libil2cpp.so" in libs),
+              ("Unreal Engine", lambda: "libUE4.so" in libs or "libUnreal.so" in libs),
+              ("Godot", lambda: any(n.startswith("libgodot") for n in libs)),
+              ("Cocos2d", lambda: any(n.startswith("libcocos") for n in libs)),
+              ("Xamarin / .NET MAUI", lambda: any("mono" in n.lower() or "xamarin" in n.lower() for n in libs) or any(a.lower() in ("assemblies",) for a in asset_top)),
+              ("Cordova / Ionic / Capacitor (WebView)", lambda: "www" in asset_top or "public" in asset_top and "capacitor.config.json" in asset_top),
+              ("Kotlin Multiplatform / Compose (indice)", lambda: False),
+          ]
+          found = [n for n, f in rules if f()]
+          if found:
+              for n in found: w(f"- {n}")
+          else:
+              w("- Aucun moteur multiplateforme détecté : application Android native (Java/Kotlin).")
+          w()
+          if libs:
+              w("Bibliothèques natives (.so) :")
+              w()
+              for n in sorted(libs): w(f"- `{n}` ({', '.join(sorted(libs[n]))})")
+              w()
+          if asset_top:
+              w("Contenu de `assets/` (premier niveau) : " + ", ".join(f"`{a}`" for a in asset_top[:40]))
+              w()
+
+          # ---- Packages / bibliothèques
+          w("## 3. Code Java/Kotlin (JADX)")
+          w()
+          src = os.path.join(jadx, "sources")
+          n_files, n_bytes = tree_size(src) if os.path.isdir(src) else (0, 0)
+          w(f"- Fichiers décompilés : {n_files}  ({n_bytes/1048576:.1f} Mo)")
+          pk_count = collections.Counter()
+          class_names = []
+          for r, _, fs in os.walk(src):
+              rel = os.path.relpath(r, src)
+              for f in fs:
+                  if f.endswith(".java"):
+                      class_names.append(f[:-5])
+                      if rel != ".":
+                          parts = rel.split(os.sep)
+                          pk_count[".".join(parts[:3])] += 1
+          short = sum(1 for c in class_names if len(c) <= 2)
+          if class_names:
+              pct = 100 * short / len(class_names)
+              w(f"- Classes à nom très court (<= 2 lettres) : {pct:.0f} %"
+                + ("  -> **code probablement obfusqué**" if pct > 20 else "  -> code peu ou pas obfusqué"))
+          w()
+          w("Packages les plus volumineux (3 premiers niveaux, nombre de classes) :")
+          w()
+          for p, c in pk_count.most_common(40): w(f"- `{p}` : {c}")
+          w()
+
+          known = {
+           "okhttp3": "OkHttp (réseau)", "retrofit2": "Retrofit (API REST)", "com.squareup.picasso": "Picasso (images)",
+           "com.bumptech.glide": "Glide (images)", "coil": "Coil (images)", "io.reactivex": "RxJava", "kotlinx.coroutines": "Coroutines Kotlin",
+           "androidx.room": "Room (base SQLite)", "androidx.work": "WorkManager (tâches de fond)", "androidx.compose": "Jetpack Compose (UI)",
+           "androidx.media3": "Media3 / ExoPlayer (vidéo, audio)", "com.google.android.exoplayer2": "ExoPlayer (vidéo, audio)",
+           "com.google.firebase": "Firebase", "com.google.android.gms.ads": "Google AdMob (pubs)", "com.google.android.gms": "Google Play Services",
+           "com.google.gson": "Gson (JSON)", "com.squareup.moshi": "Moshi (JSON)", "com.fasterxml.jackson": "Jackson (JSON)",
+           "com.facebook": "SDK Facebook", "com.unity3d": "Unity (pubs/moteur)", "io.flutter": "Flutter", "com.facebook.react": "React Native",
+           "dagger": "Dagger / Hilt (injection)", "org.koin": "Koin (injection)", "com.airbnb.lottie": "Lottie (animations)",
+           "com.stripe": "Stripe (paiement)", "com.paypal": "PayPal", "com.android.billingclient": "Google Play Billing",
+           "com.onesignal": "OneSignal (notifications)", "com.appsflyer": "AppsFlyer (attribution)", "com.adjust": "Adjust (attribution)",
+           "com.applovin": "AppLovin (pubs)", "com.mapbox": "Mapbox (cartes)", "io.sentry": "Sentry (erreurs)", "com.mixpanel": "Mixpanel (analytics)",
+           "com.amplitude": "Amplitude (analytics)", "io.ktor": "Ktor (réseau)", "com.apollographql": "Apollo (GraphQL)",
+           "org.webrtc": "WebRTC (appel/vidéo)", "io.agora": "Agora (appel/vidéo)", "org.tensorflow": "TensorFlow Lite (IA)",
+           "com.google.mlkit": "ML Kit (IA)", "okio": "Okio", "org.greenrobot.eventbus": "EventBus", "com.jakewharton": "Bibliothèques Jake Wharton",
+           "com.github": "Bibliothèques GitHub tierces", "io.socket": "Socket.IO (temps réel)", "org.java_websocket": "WebSocket",
+           "net.sqlcipher": "SQLCipher (base chiffrée)", "io.realm": "Realm (base de données)", "com.google.crypto": "Tink (chiffrement)",
+          }
+          hits = {}
+          for r, ds, _ in os.walk(src):
+              rel = os.path.relpath(r, src)
+              dotted = rel.replace(os.sep, ".")
+              for k, v in known.items():
+                  if dotted == k or dotted.startswith(k + "."):
+                      hits[k] = v
+              if rel.count(os.sep) >= 4: ds[:] = []
+          w("Bibliothèques reconnues :")
+          w()
+          if hits:
+              for k, v in sorted(hits.items(), key=lambda kv: kv[1]): w(f"- {v} (`{k}`)")
+          else:
+              w("- Aucune bibliothèque connue repérée (noms de packages possiblement renommés).")
+          w()
+
+          # ---- Composants
+          w("## 4. Architecture (manifest)")
+          w()
+          for tag, nom in (("activity", "Écrans (activities)"), ("service", "Services"), ("receiver", "Receivers"), ("provider", "Providers")):
+              lst = comps.get(tag, [])
+              w(f"**{nom} : {len(lst)}**")
+              w()
+              for c in lst[:40]: w(f"- `{c}`")
+              if len(lst) > 40: w(f"- ... et {len(lst)-40} autres")
+              w()
+          w(f"**Permissions : {len(perms)}**")
+          w()
+          for p in perms: w(f"- `{p}`")
+          w()
+
+          # ---- URLs
+          w("## 5. Adresses web trouvées (API, serveurs)")
+          w()
+          noise = ("schemas.android.com", "www.w3.org", "xmlpull.org", "apache.org", "developer.android.com", "www.google.com/",
+                   "github.com/", "example.com", "play.google.com/store", "ns.adobe.com", "purl.org", "www.apple.com")
+          url_re = re.compile(r"https?://[A-Za-z0-9._~:/?#\[\]@!$&()*+,;=%-]{4,200}")
+          urls = collections.Counter()
+          scan = [src, os.path.join(atool, "res"), os.path.join(atool, "assets")]
+          for base in scan:
+              for r, _, fs in os.walk(base):
+                  for f in fs:
+                      if not f.endswith((".java", ".xml", ".json", ".txt", ".js", ".html", ".properties", ".yml", ".yaml", ".smali")):
+                          continue
+                      p = os.path.join(r, f)
+                      try:
+                          if os.path.getsize(p) > 3_000_000: continue
+                          t = open(p, errors="ignore").read()
+                      except OSError:
+                          continue
+                      for u in url_re.findall(t):
+                          u = u.rstrip(".,;)\"'")
+                          if not any(n in u for n in noise): urls[u] += 1
+          hosts = collections.Counter()
+          for u, c in urls.items():
+              m = re.match(r"https?://([^/:?#]+)", u)
+              if m: hosts[m.group(1)] += c
+          w("Domaines les plus cités :")
+          w()
+          for h, c in hosts.most_common(40): w(f"- `{h}` ({c})")
+          w()
+          w("Adresses complètes (max. 80) :")
+          w()
+          for u, _ in urls.most_common(80): w(f"- {u}")
+          w()
+
+          # ---- Fichiers de config utiles
+          w("## 6. Autres indices")
+          w()
+          gs = os.path.join(atool, "res", "values", "strings.xml")
+          if os.path.isfile(gs):
+              t = open(gs, errors="ignore").read()
+              keys = re.findall(r'name="((?:google_|firebase_|gcm_|facebook_|com\.google|default_web_client)[^"]*)"', t)
+              if keys:
+                  w("Clés/identifiants de services tiers présents dans `strings.xml` : " + ", ".join(f"`{k}`" for k in sorted(set(keys))[:20]))
+                  w()
+          w(f"- Dossiers de ressources `res/` : {len([d for d in os.listdir(os.path.join(atool,'res'))]) if os.path.isdir(os.path.join(atool,'res')) else 0}")
+          smali = [d for d in os.listdir(atool) if d.startswith("smali")] if os.path.isdir(atool) else []
+          w(f"- Dossiers smali (nombre de fichiers DEX) : {len(smali)}")
+          w()
+          w("---")
+          w("Rapport informatif : il décrit la structure de l'application, il ne remplace pas la lecture du code.")
+
+          open(out, "w", encoding="utf-8").write("\n".join(L) + "\n")
+          print(f"Rapport écrit : {out} ({len(L)} lignes)")
+          PY
+
+          python3 -I "$RUNNER_TEMP/analyse.py" \
+            "$RUNNER_TEMP/work/apk/application.apk" \
+            "$RUNNER_TEMP/work/decompiled/apktool" \
+            "$RUNNER_TEMP/work/decompiled/jadx" \
+            "$APP" \
+            "rapport-${APP}.md"
+
+          # Affiche le rapport dans le résumé de l'exécution
+          head -c 900000 "rapport-${APP}.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Conserver le code décompilé en artefact (hors dépôt, 7 jours)
+        uses: actions/upload-artifact@v4
+        with:
+          name: decompiled-${{ inputs.app_name }}
+          path: ${{ runner.temp }}/work/decompiled
+          retention-days: 7
+          compression-level: 6
+
+      - name: Committer le rapport à la racine du dépôt
         env:
           APP: ${{ inputs.app_name }}
           MSG: ${{ inputs.commit_message }}
+          CLEAN: ${{ inputs.supprimer_ancien_dossier }}
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add "decompiled/${APP}"
+          git add "rapport-${APP}.md"
+
+          if [ "${CLEAN}" = "true" ] && [ -d decompiled ]; then
+            git rm -r -q --cached decompiled
+            rm -rf decompiled
+          fi
 
           if git diff --cached --quiet; then
             echo "Aucun changement à committer."
             exit 0
           fi
 
-          # Message par défaut sans apostrophe, au cas où le champ est vide
           if [ -z "${MSG}" ]; then
-            MSG="Ajout de la decompilation de ${APP}"
+            MSG="Ajout du rapport d analyse de ${APP}"
           fi
 
           git commit -m "${MSG}"
 
-          # Évite l'échec du push si le dépôt a avancé pendant le job
           git pull --rebase origin "${GITHUB_REF_NAME}"
           git push origin "HEAD:${GITHUB_REF_NAME}"
