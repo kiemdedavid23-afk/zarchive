@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       apk_url:
-        description: "https://github.com/kiemdedavid23-afk/zarchive/releases/download/Zarchive/base.apk"
+        description: "Lien direct de l'APK dans la release"
         required: true
         type: string
       app_name:
-        description: "Nom du dossier de sortie (sans espace ni accent)"
+        description: "Nom du dossier de sortie"
         required: true
         type: string
         default: "application-decompilee"
@@ -28,8 +28,6 @@ jobs:
     steps:
       - name: Récupérer le dépôt
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Installer Java
         uses: actions/setup-java@v4
@@ -50,7 +48,19 @@ jobs:
       - name: Installer JADX et APKTool
         run: |
           sudo apt-get update
-          sudo apt-get install -y jadx apktool
+          sudo apt-get install -y apktool unzip curl
+
+          mkdir -p /opt/jadx
+          curl -L --fail --retry 3 \
+            -o /tmp/jadx.zip \
+            "https://github.com/skylot/jadx/releases/download/v1.5.6/jadx-1.5.6.zip"
+
+          unzip -q /tmp/jadx.zip -d /opt/jadx
+          chmod +x /opt/jadx/bin/jadx
+          echo "/opt/jadx/bin" >> "$GITHUB_PATH"
+
+          jadx --version
+          apktool --version
 
       - name: Décompiler le code Java avec JADX
         run: |
@@ -73,25 +83,6 @@ jobs:
             -f \
             -o "decompiled/${APP}/apktool" \
             "apk/application.apk" || echo "APKTool a terminé avec des avertissements."
-
-      - name: Créer un résumé de décompilation
-        run: |
-          APP="${{ github.event.inputs.app_name }}"
-          OUT="decompiled/${APP}"
-
-          {
-            echo "# Résultat de décompilation"
-            echo ""
-            echo "- APK source : `${{ github.event.inputs.apk_url }}`"
-            echo "- Code Java décompilé : `decompiled/${APP}/jadx/sources`"
-            echo "- Ressources et manifeste : `decompiled/${APP}/apktool`"
-            echo ""
-            echo "## Fichiers principaux"
-            echo ""
-            echo "- `decompiled/${APP}/apktool/AndroidManifest.xml`"
-            echo "- `decompiled/${APP}/jadx/resources/AndroidManifest.xml`"
-            echo "- `decompiled/${APP}/jadx/sources`"
-          } > "$OUT/README-decompilation.md"
 
       - name: Committer et pousser les fichiers décompilés
         run: |
