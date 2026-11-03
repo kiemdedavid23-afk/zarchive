@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="CMP_LIST_LEVELS">
+        <item>Aucune compression</item>
+        <item>Très rapide</item>
+        <item>Rapide</item>
+        <item>Normale</item>
+        <item>Maximale</item>
+        <item>Ultra</item>
+    </string-array>
+    <string-array name="OPT_FS_LIST_ICON_THEME">
+        <item>Classique</item>
+        <item>Plat</item>
+        <item>Plat 2</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACKGROUND">
+        <item>Arrière-plan système</item>
+        <item>Couleur unie</item>
+        <item>Par défaut</item>
+        <item>Personnalisé</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACK_BUTTON_ACTION">
+        <item>Revenir en arriére</item>
+        <item>Aller au répertoire parent</item>
+        <item>Aller au répertoire parent en cours</item>
+    </string-array>
+    <string-array name="OPT_LIST_EXTERNAL_OPEN_ARCHIVE">
+        <item>Afficher le contenu</item>
+        <item>Afficher un menu avec les actions disponibles</item>
+        <item>Afficher le menu des actions disponibles et sur la sortie complète</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_ARCHIVE">
+        <item>Afficher le contenu</item>
+        <item>Afficher un menu avec les actions disponibles</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_FILE">
+        <item>Afficher le fichier</item>
+        <item>Afficher le menu avec les actions disponibles</item>
+    </string-array>
+    <string-array name="OPT_LIST_THEME">
+        <item>Sombre</item>
+        <item>Clair</item>
+        <item>Clair et sombre</item>
+        <item>Amoled</item>
+        <item>Lumière/Obscurité automatique</item>
+        <item>E Ink</item>
+    </string-array>
+</resources>

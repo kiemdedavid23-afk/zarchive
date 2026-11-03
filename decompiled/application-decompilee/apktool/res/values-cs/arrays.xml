@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="CMP_LIST_LEVELS">
+        <item>Bez komprese</item>
+        <item>Nejrychlejší</item>
+        <item>Rychlá</item>
+        <item>Normální</item>
+        <item>Maximální</item>
+        <item>Extrémní</item>
+    </string-array>
+    <string-array name="OPT_FS_LIST_ICON_THEME">
+        <item>Klasické</item>
+        <item>Ploché</item>
+        <item>Ploché 2</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACKGROUND">
+        <item>Systémové pozadí</item>
+        <item>Jednobarevné</item>
+        <item>Výchozí</item>
+        <item>Vlastní</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACK_BUTTON_ACTION">
+        <item>Jít zpět</item>
+        <item>Přejít do nadřazené složky</item>
+        <item>Přejít do nadřazené složky a zobrazit aktuální adresář uprostřed</item>
+    </string-array>
+    <string-array name="OPT_LIST_EXTERNAL_OPEN_ARCHIVE">
+        <item>Zobrazit obsah</item>
+        <item>Zobrazit menu s dostupnými akcemi</item>
+        <item>Zobrazit menu s dostupnými akcemi a ukončit po dokončení</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_ARCHIVE">
+        <item>Zobrazit obsah</item>
+        <item>Zobrazit menu s dostupnými akcemi</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_FILE">
+        <item>Zobrazit soubor</item>
+        <item>Zobrazit nabídku s dostupnými akcemi</item>
+    </string-array>
+    <string-array name="OPT_LIST_THEME">
+        <item>Tmavé</item>
+        <item>Světlé</item>
+        <item>Světlé + tmavé</item>
+        <item>Amoled</item>
+        <item>Automaticky světlé/tmavé</item>
+        <item>E Ink</item>
+    </string-array>
+</resources>

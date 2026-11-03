@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="FINFO_FILE_COUNT">
+        <item quantity="other">%d 파일</item>
+    </plurals>
+    <plurals name="FINFO_FOLDER_COUNT">
+        <item quantity="other">%d 폴더</item>
+    </plurals>
+    <plurals name="FINFO_ITEM_COUNT">
+        <item quantity="other">%d 항목</item>
+    </plurals>
+</resources>

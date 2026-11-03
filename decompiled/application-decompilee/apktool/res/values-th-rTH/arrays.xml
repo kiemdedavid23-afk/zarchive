@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="CMP_LIST_LEVELS">
+        <item>ไม่มีการบีบอัด</item>
+        <item>เร็วที่สุด</item>
+        <item>เร็ว</item>
+        <item>ปกติ</item>
+        <item>สูงสุด</item>
+        <item>อัลตร้า</item>
+    </string-array>
+    <string-array name="OPT_FS_LIST_ICON_THEME">
+        <item>คลาสสิก</item>
+        <item>แบน</item>
+        <item>แบน 2</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACKGROUND">
+        <item>พื้นหลังของระบบ</item>
+        <item>สีทึบ</item>
+        <item>แบบเริ่มต้น</item>
+        <item>ปรับแต่งเอง</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACK_BUTTON_ACTION">
+        <item>กลับ</item>
+        <item>ไปที่โฟลเดอร์หลัก</item>
+        <item>ไปที่โฟลเดอร์หลักและแสดง dir ปัจจุบันตรงกลาง</item>
+    </string-array>
+    <string-array name="OPT_LIST_EXTERNAL_OPEN_ARCHIVE">
+        <item>เริ่มดูเนื้อหา</item>
+        <item>แสดงตัวเลือก ที่ดำเนินการได้</item>
+        <item>แสดงเมนูพร้อมการดำเนินการที่มีอยู่และออกเมื่อเสร็จสิ้น</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_ARCHIVE">
+        <item>ดูเนื้อหา</item>
+        <item>แสดงเมนู ด้วยตัวเลือกที่ใช้ได้</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_FILE">
+        <item>ดูไฟล์</item>
+        <item>แสดงเมนู ด้วยตัวเลือกที่ใช้ได้</item>
+    </string-array>
+    <string-array name="OPT_LIST_THEME">
+        <item>มืด</item>
+        <item>สว่าง</item>
+        <item>สว่างและมืด</item>
+        <item>Amoled</item>
+        <item>สว่าง/มืด อัตโนมัติ</item>
+        <item>E Ink</item>
+    </string-array>
+</resources>

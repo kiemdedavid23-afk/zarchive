@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="FINFO_FILE_COUNT">
+        <item quantity="other">%d ملفات</item>
+        <item quantity="zero">%d ملفات</item>
+        <item quantity="one">%d ملف</item>
+        <item quantity="two">%d ملفات</item>
+        <item quantity="few">%d ملفات</item>
+        <item quantity="many">%d ملفات</item>
+    </plurals>
+    <plurals name="FINFO_FOLDER_COUNT">
+        <item quantity="other">%d مجلدات</item>
+        <item quantity="zero">%d مجلدات</item>
+        <item quantity="one">%d مجلد</item>
+        <item quantity="two">%d مجلدات</item>
+        <item quantity="few">%d مجلدات</item>
+        <item quantity="many">%d مجلدات</item>
+    </plurals>
+    <plurals name="FINFO_ITEM_COUNT">
+        <item quantity="other">%d العناصر</item>
+        <item quantity="zero">%d العناصر</item>
+        <item quantity="one">%d العنصر</item>
+        <item quantity="two">%d العناصر</item>
+        <item quantity="few">%d العناصر</item>
+        <item quantity="many">%d العناصر</item>
+    </plurals>
+</resources>

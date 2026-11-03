@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="CMP_LIST_LEVELS">
+        <item>پرېسلىماسلىق</item>
+        <item>ئەڭ تېز پرېسلاش</item>
+        <item>تېز پرېسلاش</item>
+        <item>ئۆلچەملىك پرېسلاش</item>
+        <item>ھەر ھالدا ياخشى پرېسلاش</item>
+        <item>ئەڭ ياخشى پرېسلاش</item>
+    </string-array>
+    <string-array name="OPT_FS_LIST_ICON_THEME">
+        <item>كىلاسسىك</item>
+        <item>Flat</item>
+        <item>Flat 2</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACKGROUND">
+        <item>سىستېما مۇھىتىغا ماس رەڭ</item>
+        <item>ساپ رەڭ</item>
+        <item>كۆڭۈلدىكى رەڭ</item>
+        <item>ئاپتوماتىك رەڭ</item>
+    </string-array>
+    <string-array name="OPT_LIST_EXTERNAL_OPEN_ARCHIVE">
+        <item>مەزمۇن توغرىلىقىنى تەكشۈرسۇن</item>
+        <item>مەشغۇلات تىزىملىكىنى تەكشۈرسۇن</item>
+        <item>Show menu with available actions and exit on complete</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_ARCHIVE">
+        <item>مەزمۇن توغرىلىقىنى تەكشۈرسۇن</item>
+        <item>مەشغۇلات تىزىملىكىنى تەكشۈرسۇن</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_FILE">
+        <item>ھۆججەتنى تەكشۈرسۇن</item>
+        <item>مەشغۇلات تىزىملىكىنى تەكشۈرسۇن</item>
+    </string-array>
+    <string-array name="OPT_LIST_THEME">
+        <item>قارا رەڭلىك</item>
+        <item>ئاق رەڭلىك</item>
+        <item>رەڭسىز</item>
+        <item>Amoled</item>
+        <item>Auto Light/Dark</item>
+        <item>E Ink</item>
+    </string-array>
+</resources>

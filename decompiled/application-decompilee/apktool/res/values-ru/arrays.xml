@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="CMP_LIST_LEVELS">
+        <item>Без сжатия</item>
+        <item>Скоростной</item>
+        <item>Быстрый</item>
+        <item>Нормальный</item>
+        <item>Максимальный</item>
+        <item>Ультра</item>
+    </string-array>
+    <string-array name="OPT_FS_LIST_ICON_THEME">
+        <item>Классические иконки</item>
+        <item>Плоские иконки</item>
+        <item>Плоские иконки 2</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACKGROUND">
+        <item>Системный фон</item>
+        <item>Монотонный цвет</item>
+        <item>По умолчанию</item>
+        <item>Пользовательский</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACK_BUTTON_ACTION">
+        <item>Переход назад</item>
+        <item>Переход в родительский каталог</item>
+        <item>Переход в родительский каталог к текущему</item>
+    </string-array>
+    <string-array name="OPT_LIST_EXTERNAL_OPEN_ARCHIVE">
+        <item>Показать содержимое</item>
+        <item>Вывести меню возможных действий</item>
+        <item>Вывести меню возможных действий и выйти по завершению</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_ARCHIVE">
+        <item>Показать содержимое</item>
+        <item>Вывести меню возможных действий</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_FILE">
+        <item>Открыть файл</item>
+        <item>Вывести меню возможных действий</item>
+    </string-array>
+    <string-array name="OPT_LIST_THEME">
+        <item>Тёмная</item>
+        <item>Светлая</item>
+        <item>Светло-тёмная</item>
+        <item>Amoled</item>
+        <item>Cветлая/тёмная (авто)</item>
+        <item>E Ink</item>
+    </string-array>
+</resources>

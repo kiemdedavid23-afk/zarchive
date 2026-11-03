@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="CMP_LIST_LEVELS">
+        <item>بدون فشرده سازی</item>
+        <item>خیلی سریع</item>
+        <item>سريع</item>
+        <item>متوسط</item>
+        <item>حداکثر</item>
+        <item>زیاد</item>
+    </string-array>
+    <string-array name="OPT_FS_LIST_ICON_THEME">
+        <item>کلاسیک</item>
+        <item>یکنواخت</item>
+        <item>یکنواخت ۲</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACKGROUND">
+        <item>System background</item>
+        <item>پس زمینه سیستم</item>
+        <item>اصلی</item>
+        <item>شخصی</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACK_BUTTON_ACTION">
+        <item>بازگشت</item>
+        <item>برگشت به پوشه اصلی</item>
+        <item>Go to parent folder and show current dir in center</item>
+    </string-array>
+    <string-array name="OPT_LIST_EXTERNAL_OPEN_ARCHIVE">
+        <item>نمایش محتوا</item>
+        <item>نمایش گزینه های بیشتر</item>
+        <item>Show menu with available actions and exit on compleate</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_ARCHIVE">
+        <item>نمایش محتوا</item>
+        <item>نمایش گزینه های بیشتر</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_FILE">
+        <item>نمایش فایل</item>
+        <item>نمایش منو با اقدامات در دسترس</item>
+    </string-array>
+    <string-array name="OPT_LIST_THEME">
+        <item>سیاه</item>
+        <item>سفید</item>
+        <item>Light and Dark</item>
+        <item>Amoled</item>
+        <item>Auto Light/Dark</item>
+        <item>جوهر الکترونیکی</item>
+    </string-array>
+</resources>

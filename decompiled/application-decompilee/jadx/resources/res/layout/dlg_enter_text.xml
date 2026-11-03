@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/padding_tiny"
+    android:paddingRight="@dimen/padding_tiny"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:isScrollContainer="true">
+    <TextView
+        android:textAppearance="?android:attr/textAppearance"
+        android:gravity="start|center_vertical"
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="viewStart"/>
+    <ru.zdevs.zarchiver.p045ui.text.ExEditText
+        android:id="@+id/edt_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <requestFocus/>
+    </ru.zdevs.zarchiver.p045ui.text.ExEditText>
+</LinearLayout>

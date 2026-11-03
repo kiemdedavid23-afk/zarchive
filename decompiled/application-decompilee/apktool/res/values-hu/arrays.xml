@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="CMP_LIST_LEVELS">
+        <item>Nincs tömörítés</item>
+        <item>Leggyorsabb</item>
+        <item>Gyors</item>
+        <item>Normál</item>
+        <item>Maximális</item>
+        <item>Ultra</item>
+    </string-array>
+    <string-array name="OPT_FS_LIST_ICON_THEME">
+        <item>Klasszikus</item>
+        <item>Egyszintű</item>
+        <item>Egyszintű 2</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACKGROUND">
+        <item>Rendszer háttere</item>
+        <item>Egyszínű</item>
+        <item>Alapértelmezett</item>
+        <item>Egyéni</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACK_BUTTON_ACTION">
+        <item>Vissza</item>
+        <item>Vissza a szülőkönyvtárba</item>
+        <item>Ugorjon a szülőkönyvtárba és jelenítse meg az aktuális könyvtárat középen</item>
+    </string-array>
+    <string-array name="OPT_LIST_EXTERNAL_OPEN_ARCHIVE">
+        <item>Tartalmak megtekintése</item>
+        <item>Menü megjelenítése a rendelkezésre álló műveletekkel</item>
+        <item>Menü megjelenítése az elérhető műveletekkel és kilépés befejezéskor</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_ARCHIVE">
+        <item>Tartalmak megtekintése</item>
+        <item>Menü megjelenítése a rendelkezésre álló műveletekkel</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_FILE">
+        <item>Fájl megtekintése</item>
+        <item>Menü megjelenítése a rendelkezésre álló műveletekkel</item>
+    </string-array>
+    <string-array name="OPT_LIST_THEME">
+        <item>Sötét</item>
+        <item>Világos</item>
+        <item>Világos és sötét</item>
+        <item>Amoled</item>
+        <item>Automatikus fény/sötét</item>
+        <item>E Ink</item>
+    </string-array>
+</resources>

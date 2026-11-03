@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="FINFO_FILE_COUNT">
+        <item quantity="other">%d datoteka</item>
+        <item quantity="one">%d datoteka</item>
+        <item quantity="few">%d datoteka</item>
+    </plurals>
+    <plurals name="FINFO_FOLDER_COUNT">
+        <item quantity="other">%d mapa</item>
+        <item quantity="one">%d mapa</item>
+        <item quantity="few">%d mape</item>
+    </plurals>
+    <plurals name="FINFO_ITEM_COUNT">
+        <item quantity="other">%d stavki</item>
+        <item quantity="one">%d stavku</item>
+        <item quantity="few">%d stavke</item>
+    </plurals>
+</resources>

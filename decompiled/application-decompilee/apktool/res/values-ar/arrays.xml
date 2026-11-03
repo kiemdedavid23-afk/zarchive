@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="CMP_LIST_LEVELS">
+        <item>بدون ضغط</item>
+        <item>الأسرع</item>
+        <item>سريع</item>
+        <item>عادي</item>
+        <item>الأقصى</item>
+        <item>الفائق</item>
+    </string-array>
+    <string-array name="OPT_FS_LIST_ICON_THEME">
+        <item>كلاسيكية</item>
+        <item>مسطحة</item>
+        <item>مسطحة ٢</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACKGROUND">
+        <item>خلفية النظام</item>
+        <item>لون غامق</item>
+        <item>إفتراضي</item>
+        <item>مخصص</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACK_BUTTON_ACTION">
+        <item>الرجوع للخلف</item>
+        <item>الإنتقال إلى المجلد الأصل</item>
+        <item>أنتقل إلى المجلد الأصل وإظهر المجلد الحالي في الوسط</item>
+    </string-array>
+    <string-array name="OPT_LIST_EXTERNAL_OPEN_ARCHIVE">
+        <item>عرض المحتويات</item>
+        <item>إظهار القائمة مع الإجراءات المتاحة</item>
+        <item>إظهار القائمة مع الإجراءات المتاحة والخروج عند الاكتمال</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_ARCHIVE">
+        <item>عرض المحتويات</item>
+        <item>إظهار القائمة مع الإجراءات المتاحة</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_FILE">
+        <item>عرض الملف</item>
+        <item>إظهار القائمة مع الإجراءات المتاحة</item>
+    </string-array>
+    <string-array name="OPT_LIST_THEME">
+        <item>داكن</item>
+        <item>فاتح</item>
+        <item>فاتح وداكن</item>
+        <item>أموليد</item>
+        <item>تلقائي فاتح / داكن</item>
+        <item>E Ink</item>
+    </string-array>
+</resources>

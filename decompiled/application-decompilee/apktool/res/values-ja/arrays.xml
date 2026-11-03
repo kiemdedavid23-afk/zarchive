@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="CMP_LIST_LEVELS">
+        <item>無圧縮</item>
+        <item>最速</item>
+        <item>高速</item>
+        <item>標準</item>
+        <item>最高</item>
+        <item>超圧縮</item>
+    </string-array>
+    <string-array name="OPT_FS_LIST_ICON_THEME">
+        <item>クラシック</item>
+        <item>フラット</item>
+        <item>フラット 2</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACKGROUND">
+        <item>システム</item>
+        <item>単色</item>
+        <item>デフォルト</item>
+        <item>カスタム</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACK_BUTTON_ACTION">
+        <item>ひとつ前に戻る</item>
+        <item>ひとつ上のフォルダに移動する</item>
+        <item>ひとつ上のフォルダに移動して、現在のフォルダを画面中央に表示する</item>
+    </string-array>
+    <string-array name="OPT_LIST_EXTERNAL_OPEN_ARCHIVE">
+        <item>アーカイブの内容を閲覧する</item>
+        <item>メニューから処理を選択する</item>
+        <item>メニューから処理を選択して完了後に終了する</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_ARCHIVE">
+        <item>アーカイブの内容を閲覧する</item>
+        <item>メニューから処理を選択する</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_FILE">
+        <item>ファイルの内容を閲覧する</item>
+        <item>メニューから処理を選択する</item>
+    </string-array>
+    <string-array name="OPT_LIST_THEME">
+        <item>ダーク</item>
+        <item>ライト</item>
+        <item>ライト &amp; ダーク</item>
+        <item>Amoled</item>
+        <item>ライト &amp; ダーク (自動)</item>
+        <item>E Ink</item>
+    </string-array>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="FINFO_FILE_COUNT">
+        <item quantity="one">%d súbor</item>
+        <item quantity="few">%d súborov</item>
+        <item quantity="many">%d súborov</item>
+        <item quantity="other">%d súbory</item>
+    </plurals>
+    <plurals name="FINFO_FOLDER_COUNT">
+        <item quantity="one">%d zložka</item>
+        <item quantity="few">%d zložiek</item>
+        <item quantity="many">%d zložiek</item>
+        <item quantity="other">%d zložky</item>
+    </plurals>
+    <plurals name="FINFO_ITEM_COUNT">
+        <item quantity="one">%d položka</item>
+        <item quantity="few">%d položiek</item>
+        <item quantity="many">%d položiek</item>
+        <item quantity="other">%d položky</item>
+    </plurals>
+</resources>

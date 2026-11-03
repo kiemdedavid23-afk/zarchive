@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="CMP_LIST_LEVELS">
+        <item>无压缩</item>
+        <item>最快</item>
+        <item>快速</item>
+        <item>标准</item>
+        <item>较好</item>
+        <item>最佳</item>
+    </string-array>
+    <string-array name="OPT_FS_LIST_ICON_THEME">
+        <item>经典</item>
+        <item>Flat</item>
+        <item>Flat 2</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACKGROUND">
+        <item>系统背景</item>
+        <item>纯色</item>
+        <item>默认</item>
+        <item>自定义</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACK_BUTTON_ACTION">
+        <item>返回</item>
+        <item>上级目录</item>
+        <item>转到上一级并居中显示当前文件夹</item>
+    </string-array>
+    <string-array name="OPT_LIST_EXTERNAL_OPEN_ARCHIVE">
+        <item>查看内容</item>
+        <item>显示可操作菜单</item>
+        <item>显示可操作和完全退出菜单</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_ARCHIVE">
+        <item>查看内容</item>
+        <item>显示可操作菜单</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_FILE">
+        <item>查看文件</item>
+        <item>显示可用操作菜单</item>
+    </string-array>
+    <string-array name="OPT_LIST_THEME">
+        <item>黑色</item>
+        <item>白色</item>
+        <item>黑白</item>
+        <item>Amoled</item>
+        <item>自动 白天/夜晚</item>
+        <item>电子墨水</item>
+    </string-array>
+</resources>

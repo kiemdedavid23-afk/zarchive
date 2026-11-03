@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="CMP_LIST_LEVELS">
+        <item>Siqmaslik</item>
+        <item>Tezkor</item>
+        <item>Tez</item>
+        <item>Normal</item>
+        <item>Maksimal</item>
+        <item>Ultra</item>
+    </string-array>
+    <string-array name="OPT_FS_LIST_ICON_THEME">
+        <item>Klassik tugmalar</item>
+        <item>Bejirim tugmalar</item>
+        <item>Bejirim tugmalar 2</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACKGROUND">
+        <item>Tizim fonida</item>
+        <item>Bir xil rangda</item>
+        <item>Standart</item>
+        <item>Foydalanuvchi tanlovi</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACK_BUTTON_ACTION">
+        <item>Orqaga qaytsin</item>
+        <item>Standart papkaga oʻtsin</item>
+        <item>Joriy standart papkaga oʻtsin</item>
+    </string-array>
+    <string-array name="OPT_LIST_EXTERNAL_OPEN_ARCHIVE">
+        <item>Tarkibi koʻrsatilsin</item>
+        <item>Amallarni tanlash menyusi koʻrsatilsin</item>
+        <item>Amallarni tanlash menyusi koʻrsatilsin va chiqilsin</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_ARCHIVE">
+        <item>Arxiv ichi koʻrsatilsin</item>
+        <item>Menyu koʻrsatilsin</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_FILE">
+        <item>Fayl ochilsin</item>
+        <item>Menyu koʻrsatilsin</item>
+    </string-array>
+    <string-array name="OPT_LIST_THEME">
+        <item>Qora</item>
+        <item>Och</item>
+        <item>Kul rang</item>
+        <item>Amoled</item>
+        <item>Auto Light/Dark</item>
+        <item>E Ink</item>
+    </string-array>
+</resources>

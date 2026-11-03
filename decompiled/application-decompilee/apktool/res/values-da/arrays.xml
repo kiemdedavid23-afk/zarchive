@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="CMP_LIST_LEVELS">
+        <item>Ingen komprimering</item>
+        <item>Hurtigst</item>
+        <item>Hurtig</item>
+        <item>Normal</item>
+        <item>Maksimum</item>
+        <item>Ultrahøj</item>
+    </string-array>
+    <string-array name="OPT_FS_LIST_ICON_THEME">
+        <item>Klassisk</item>
+        <item>Flad</item>
+        <item>Flad 2</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACKGROUND">
+        <item>Systembaggrund</item>
+        <item>Fast farve</item>
+        <item>Standard</item>
+        <item>Tilpasset</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACK_BUTTON_ACTION">
+        <item>Gå tilbage</item>
+        <item>Gå til hovedmappe</item>
+        <item>Gå til hovedmappe og vis aktuel mappe centreret</item>
+    </string-array>
+    <string-array name="OPT_LIST_EXTERNAL_OPEN_ARCHIVE">
+        <item>Vis indhold</item>
+        <item>Vis menu med relevante handlinger</item>
+        <item>Vis menu med relevante handlinger, og afslut når udført</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_ARCHIVE">
+        <item>Vis indhold</item>
+        <item>Vis menu med relevante handlinger</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_FILE">
+        <item>Vis fil</item>
+        <item>Vis menu med relevante handlinger</item>
+    </string-array>
+    <string-array name="OPT_LIST_THEME">
+        <item>Mørkt</item>
+        <item>Lyst</item>
+        <item>Lyst og mørkt</item>
+        <item>Amoled</item>
+        <item>Auto Lyst/Mørkt</item>
+        <item>E Ink</item>
+    </string-array>
+</resources>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="CMP_LIST_LEVELS">
+        <item>Keine Kompression</item>
+        <item>Schnellste</item>
+        <item>Schnell</item>
+        <item>Normal</item>
+        <item>Maximum</item>
+        <item>Ultra</item>
+    </string-array>
+    <string-array name="OPT_FS_LIST_ICON_THEME">
+        <item>Klassisch</item>
+        <item>Flach</item>
+        <item>Flach 2</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACKGROUND">
+        <item>System-Hintergrund</item>
+        <item>Einzelne Farbe</item>
+        <item>Standard</item>
+        <item>Eigener Hintergrund</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACK_BUTTON_ACTION">
+        <item>Zurückgehen</item>
+        <item>Gehe zum übergeordneten Verzeichnis</item>
+        <item>Gehen Sie zum übergeordneten Verzeichnis und zeigen Sie das aktuelle Verzeichnis in der Mitte an</item>
+    </string-array>
+    <string-array name="OPT_LIST_EXTERNAL_OPEN_ARCHIVE">
+        <item>Zeige Inhalt</item>
+        <item>Zeige Menü mit mögl. Aktionen</item>
+        <item>Zeige Menü mit möglichen Aktionen und beenden wenn fertig</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_ARCHIVE">
+        <item>Zeige Inhalt</item>
+        <item>Zeige Menü mit mögl. Aktionen</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_FILE">
+        <item>Zeige Inhalt</item>
+        <item>Zeige Menü mit mögl. Aktionen</item>
+    </string-array>
+    <string-array name="OPT_LIST_THEME">
+        <item>Dunkel</item>
+        <item>Hell</item>
+        <item>Hell und Dunkel</item>
+        <item>Amoled</item>
+        <item>Hell/Dunkel (Auto)</item>
+        <item>E Ink</item>
+    </string-array>
+</resources>

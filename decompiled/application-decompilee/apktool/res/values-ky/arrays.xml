@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="CMP_LIST_LEVELS">
+        <item>قىسىلباعان</item>
+        <item>ەڭ تەز</item>
+        <item>تەز</item>
+        <item>نورماال</item>
+        <item>ۅتۅ جاقشى</item>
+        <item>ەڭ جاقشى</item>
+    </string-array>
+    <string-array name="OPT_FS_LIST_ICON_THEME">
+        <item>كىلاسسىك</item>
+        <item>Flat</item>
+        <item>Flat 2</item>
+    </string-array>
+    <string-array name="OPT_LIST_BACKGROUND">
+        <item>سەستىما كۅرۉنۉشۉ</item>
+        <item>بوز</item>
+        <item>كۅڭۉلدۅكۉ</item>
+        <item>ۅزۉ بەلگىلۅۅ</item>
+    </string-array>
+    <string-array name="OPT_LIST_EXTERNAL_OPEN_ARCHIVE">
+        <item>ئچكى مازمۇۇندۇ تەكشەرۉۉ</item>
+        <item>ىشتۅۅ تىزىمدىكتى كۅرسۅتۅي</item>
+        <item>ىشتۅۅدۅن بۉتكۅندۅ چەكىنۉۉ تىزىمدىگىن كۅرۅسۅتۅت</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_ARCHIVE">
+        <item>ئچكى مازمۇۇندۇ تەكشەرۉۉ</item>
+        <item>تىزىمدىكتى كۅرسۅتۅت</item>
+    </string-array>
+    <string-array name="OPT_LIST_OPEN_FILE">
+        <item>ۅجۅت تەكشەرۉۉ</item>
+        <item>تىزىمدىكتى كۅرسۅتۅت</item>
+    </string-array>
+    <string-array name="OPT_LIST_THEME">
+        <item>قارا</item>
+        <item>اق</item>
+        <item>ىراڭسىز</item>
+        <item>Amoled</item>
+        <item>Auto Light/Dark</item>
+        <item>E Ink</item>
+    </string-array>
+</resources>

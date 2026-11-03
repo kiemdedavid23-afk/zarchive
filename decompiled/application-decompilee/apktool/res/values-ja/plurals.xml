@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="FINFO_FILE_COUNT">
+        <item quantity="other">%d ファイル</item>
+        <item quantity="one">%d ファイル</item>
+    </plurals>
+    <plurals name="FINFO_FOLDER_COUNT">
+        <item quantity="other">%d フォルダ</item>
+        <item quantity="one">%d フォルダ</item>
+    </plurals>
+    <plurals name="FINFO_ITEM_COUNT">
+        <item quantity="other">%d アイテム</item>
+        <item quantity="one">%d アイテム</item>
+    </plurals>
+</resources>

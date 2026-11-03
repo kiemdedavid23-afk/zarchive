@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:icon="?attr/menuIconOk"
+        android:id="@+id/bOk"
+        android:title="@string/BTN_OK"
+        android:showAsAction="always"/>
+    <item
+        android:icon="?attr/menuIconCompress"
+        android:id="@+id/bCreateArchive"
+        android:title=""
+        android:showAsAction="always"/>
+    <item
+        android:icon="?attr/menuIconSelect"
+        android:id="@+id/bMenuSelect"
+        android:title="@string/MENU_SELECT">
+        <menu>
+            <item
+                android:icon="?attr/menuIconSelectAll"
+                android:id="@+id/bSelectAll"
+                android:title="@string/MENU_ALL_SELECT"/>
+            <item
+                android:icon="?attr/menuIconSelectInvert"
+                android:id="@+id/bSelectInvert"
+                android:title="@string/MENU_INVERT_SELECT"/>
+            <item
+                android:icon="?attr/menuIconSelectClear"
+                android:id="@+id/bSelectClear"
+                android:title="@string/MENU_CLEAR_SELECT"/>
+        </menu>
+    </item>
+</menu>

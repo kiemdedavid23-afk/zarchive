@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="FINFO_FILE_COUNT">
+        <item quantity="other">%d file</item>
+        <item quantity="one">%d file</item>
+        <item quantity="many">%d file</item>
+    </plurals>
+    <plurals name="FINFO_FOLDER_COUNT">
+        <item quantity="other">%d cartelle</item>
+        <item quantity="one">%d cartella</item>
+        <item quantity="many">%d cartelle</item>
+    </plurals>
+    <plurals name="FINFO_ITEM_COUNT">
+        <item quantity="other">%d oggetti</item>
+        <item quantity="one">%d oggetto</item>
+        <item quantity="many">%d oggetti</item>
+    </plurals>
+</resources>
