@@ -160,7 +160,12 @@ jobs:
             exit 0
           fi
 
-          git commit -m "${MSG:-Ajout de la décompilation de l'application}"
+          # Message par défaut sans apostrophe, au cas où le champ est vide
+          if [ -z "${MSG}" ]; then
+            MSG="Ajout de la decompilation de ${APP}"
+          fi
+
+          git commit -m "${MSG}"
 
           # Évite l'échec du push si le dépôt a avancé pendant le job
           git pull --rebase origin "${GITHUB_REF_NAME}"
